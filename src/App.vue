@@ -1,32 +1,86 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
+    <AppHeader v-show="showHeader" :showBack="showBack" :title="title"></AppHeader>
+    <transition name='fade'>
+      <router-view :city="city" @update-payorder="updatePayOrder"></router-view>
+    </transition>
+    <AppTabBar v-show="showTab" :loginStatus="loginStatus" @custom-update-title="updateTitle"></AppTabBar>
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script>
+import AppHeader from './components/AppHeader'
+import AppTabBar from './components/AppTabBar'
+
+export default {
+  name: 'app',
+  provide () {
+    return {
+      app: this
+    }
+  },
+  data() {
+    return {
+      title:'猫眼电影',
+      city:'广州',
+      showHeader:true,
+      showTab:true,
+      showBack:false,
+      loginStatus:false,
+      payOrders:[]
+    };
+  },
+  computed: {
+    unread() {
+      return this.payOrders.length ;
+    }
+  },
+  methods: {
+    updateTitle(title){
+      this.title = title;
+    },
+    updatePayOrder(orderInfo){
+      this.payOrders.push(orderInfo)
+    }
+  },
+  components:{
+    AppHeader,
+    AppTabBar
+  },
+}
+</script>
+
+<style lang="less">
+#app{
+  font-size: 0;
+  color:#424242;
+  position: relative;
+  background: #f5f5f5;
 }
 
-#nav {
-  padding: 30px;
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .25s;
+}
+.fade-enter, .fade-leave-to  {
+  opacity: 0;
+}
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+//bounce(动画)
+.bounce-enter-active {
+  animation: bounce-in .3s;
+}
+.bounce-leave-active {
+  animation: bounce-in .3s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 </style>

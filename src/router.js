@@ -1,5 +1,5 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
+import Vue from 'vue';
+import Router from 'vue-router';
 
 //一级路由
 import MoviePage from './views/MoviePage.vue' 
@@ -14,7 +14,7 @@ import SeatsPage from './views/SeatsPage.vue'
 import LoginPage from './views/LoginPage.vue'
 import MovieOrder from './views/MovieOrder.vue'
 
-Vue.use(VueRouter);
+Vue.use(Router);
 
 const routes = [
   {path:'/',name:'movie',component:MoviePage,alias:'/movie'},
@@ -30,10 +30,7 @@ const routes = [
   {path:'/login',name:'login',component:LoginPage}
 ];
 
-const router = new VueRouter({
-  mode: "history",
-  base: process.env.BASE_URL,
-  routes
+export default new Router({
+  routes,
+  mode:'history',
 });
-
-export default router;
